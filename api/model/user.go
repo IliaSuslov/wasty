@@ -41,3 +41,13 @@ func CreateAdmin(DB *mongo.Database)error{
 func NewUser(Name string)*User{
 	return &User{Name: Name}
 }
+
+func IsRole(roles interface{}, role string)int{
+	Roles := roles.([]string)
+	for i, v := range Roles{
+		if v ==role{
+			return i
+		}
+	}
+	return -1
+}
