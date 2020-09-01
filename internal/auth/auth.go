@@ -24,7 +24,7 @@ func BasicAuth(get GetUser) func(handler) handler {
 				http.Error(w, "Unauthorized.", http.StatusUnauthorized)
 				return
 			} else {
-				gcontext.Set(r, "user", User)
+				gcontext.Set(r, "user", *User)
 			}
 			h(w, r)
 		}

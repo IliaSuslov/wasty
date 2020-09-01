@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/alexsuslov/wasty/api/model"
+	gcontext "github.com/gorilla/context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -47,7 +48,12 @@ func OnError(w http.ResponseWriter, err error) bool {
 func Addresses(DB *mongo.Database) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		//todo: check permishion
+		user := gcontext.Get(r, "user")
+		User := user.(model.User)
+		if !User.IsRole("admin", "manager") {
+			Denied(w)
+			return
+		}
 
 		//query
 		q := &struct {

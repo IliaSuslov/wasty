@@ -17,9 +17,10 @@ import (
 func Roles(DB *mongo.Database, t *template.Template) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		col := DB.Collection("roles")
-		roles := gcontext.Get(r, "user_roles")
-		if model.IsRole(roles, "admin") == -1 {
-			w.WriteHeader(401)
+		user := gcontext.Get(r, "user")
+		User := user.(model.User)
+		if !User.IsRole("admin", "manager"){
+			Denied(w)
 			return
 		}
 		q := r.URL.Query()
