@@ -69,6 +69,7 @@ func Addresses(DB *mongo.Database) func(w http.ResponseWriter, r *http.Request) 
 			Limit: q.Limit,
 			Skip:  q.Skip,
 		}
+		ads := []*model.Address{}
 		cur, err := c.Find(context.Background(), query, opt)
 		if OnError(w, err) {
 			return
@@ -79,10 +80,11 @@ func Addresses(DB *mongo.Database) func(w http.ResponseWriter, r *http.Request) 
 			if OnError(w, err) {
 				return
 			}
-			json.NewEncoder(w).Encode(Addr)
-			if OnError(w, err) {
-				return
-			}
+			ads = append(ads, Addr)
+		}
+		json.NewEncoder(w).Encode(ads)
+		if OnError(w, err) {
+			return
 		}
 	}
 }
