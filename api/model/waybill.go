@@ -16,11 +16,7 @@ type Waybill struct{
 	Executions []Execution
 }
 
-type Driver struct {
-	Name string
-	Phone string
-	Email string
-}
+
 
 type Execution struct{
 	Date time.Time
