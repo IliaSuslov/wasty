@@ -18,6 +18,11 @@ type User struct{
 	Roles []string
 }
 
+type Role struct{
+	ID primitive.ObjectID
+	Name string
+}
+
 func CreateAdmin(DB *mongo.Database)error{
 	col := DB.Collection("users")
 	res:=col.FindOne(context.Background(), bson.M{"name":"admin"})
