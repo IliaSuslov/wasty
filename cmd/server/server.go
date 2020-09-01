@@ -54,14 +54,17 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", hands.Home(DB, T)).Methods("GET")
 	r.HandleFunc("/login", hands.Login(DB, T))
-	r.HandleFunc("/roles",
-		basicAuth(hands.Roles(DB, T)))
-	r.HandleFunc("/users",
-		basicAuth(hands.Users(DB, T)))
-	r.HandleFunc("/create/waybill",
-		basicAuth(hands.CreateWaybillForm(T))).Methods("GET")
-	r.HandleFunc("/create/waybill",
-		basicAuth(hands.CreateWaybill(DB, T))).Methods("POST")
+
+	r.HandleFunc("/api/v1/drivers",
+		basicAuth(hands.Drivers(DB))).Methods("GET")
+	r.HandleFunc("/api/v1/cars",
+		basicAuth(hands.Cars(DB))).Methods("GET")
+	r.HandleFunc("/api/v1/addresses",
+		basicAuth(hands.Addresses(DB))).Methods("GET")
+	r.HandleFunc("/api/v1/addresses",
+		basicAuth(hands.Addresses(DB))).Methods("GET")
+
+
 
 	//r.HandleFunc("/api_v1/users",
 	//	app.CreateTicketHandler(CheckToken, ticket.NewComm(DB), d)).Methods("POST")
