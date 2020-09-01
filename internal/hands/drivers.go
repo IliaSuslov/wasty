@@ -27,16 +27,18 @@ func Drivers(DB *mongo.Database) func(w http.ResponseWriter, r *http.Request) {
 		if err!= nil{
 			log.Println(err)
 		}
+		res :=[]*model.Driver{}
 		for cur.Next(context.Background()){
 			Driver:=&model.Driver{}
 			err :=cur.Decode(Driver)
 			if err!= nil{
 				log.Println(err)
 			}
-			err=json.NewEncoder(w).Encode(Driver)
-			if err!= nil{
-				log.Println(err)
-			}
+			res = append(res, Driver)
+		}
+		json.NewEncoder(w).Encode(res)
+		if OnError(w, err) {
+			return
 		}
 	}
 }

@@ -10,33 +10,35 @@ import (
 	"net/http"
 )
 
-type CarsQuery struct{
-	Name *string
-	Limit *int
+type CarsQuery struct {
+	Name   *string
+	Limit  *int
 	Offset *int
 }
 
 func Cars(DB *mongo.Database) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		//todo: check permishion
-		query:=bson.M{}
+		query := bson.M{}
 		c := DB.Collection("cars")
 		w.Header().Set("ContentType", "application/json")
 		//todo: limit, skip
 		cur, err := c.Find(context.Background(), query)
-		if err!= nil{
+		if err != nil {
 			log.Println(err)
 		}
-		for cur.Next(context.Background()){
-			Car:=&model.Car{}
-			err :=cur.Decode(Car)
-			if err!= nil{
-				log.Println(err)
+		res := []*model.Car{}
+		for cur.Next(context.Background()) {
+			Car := &model.Car{}
+			err := cur.Decode(Car)
+			if OnError(w, err) {
+				return
 			}
-			err=json.NewEncoder(w).Encode(Car)
-			if err!= nil{
-				log.Println(err)
-			}
+			res = append(res, Car)
+		}
+		json.NewEncoder(w).Encode(res)
+		if OnError(w, err) {
+			return
 		}
 	}
 }
