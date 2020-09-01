@@ -1,0 +1,33 @@
+{{define "form_group"}}
+  <div class="form-group">
+    <label >{{.Label}}</label>
+    <input type={{.Type}}
+           class="form-control"
+           name={{.Name}}
+           placeholder={{.Placeholder}}>
+    {{ if ne .Desc ""}}
+      <small id="emailHelp" class="form-text text-muted">{{.Desc}}</small>
+    {{ end }}
+  </div>
+{{end}}
+
+{{ define "form_create_waybill" }}
+  <form method="post">
+    {{range .FormGroups}}
+      {{ template "form_group" .}}
+    {{end}}
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+{{ end }}
+
+<!DOCTYPE html>
+<html lang="ru_RU">
+{{ template "header.html" . }}
+<body>
+<div class="container-fluid">
+    {{ template "navbar.html" .}}
+  <h4>{{.Title}}</h4>
+  {{ template "form_create_waybill" .}}
+</div>
+</body>
+</html>
