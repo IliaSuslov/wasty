@@ -1,14 +1,15 @@
 package auth
 
 import (
-	"github.com/gorilla/context"
+	"github.com/alexsuslov/wasty/api/model"
+	gcontext "github.com/gorilla/context"
 	"net/http"
 )
 
 type handler func(w http.ResponseWriter, r *http.Request)
-type GetRoles func(username string, password string) (roles []string, err error)
+type GetUser func(username string, password string) (user *model.User, err error)
 
-func BasicAuth(get GetRoles) func(handler) handler {
+func BasicAuth(get GetUser) func(handler) handler {
 	return func(h handler) handler {
 		return func(w http.ResponseWriter, r *http.Request) {
 			user, pass, _ := r.BasicAuth()
@@ -17,14 +18,13 @@ func BasicAuth(get GetRoles) func(handler) handler {
 				http.Error(w, "Unauthorized.", http.StatusUnauthorized)
 				return
 			}
-			roles, err := get(user, pass)
+			User, err := get(user, pass)
 			if err != nil {
 				w.Header().Set("WWW-Authenticate", "Basic realm=\"MY REALM\"")
 				http.Error(w, "Unauthorized.", http.StatusUnauthorized)
 				return
 			} else {
-				context.Set(r, "user_roles", roles)
-				//w.Header().Set("w_roles", strings.Join(roles, ","))
+				gcontext.Set(r, "user", User)
 			}
 			h(w, r)
 		}
