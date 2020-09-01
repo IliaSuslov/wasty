@@ -54,6 +54,8 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", hands.Home(DB, T)).Methods("GET")
 	r.HandleFunc("/login", hands.Login(DB, T))
+	r.HandleFunc("/roles",
+		basicAuth(hands.Roles(DB, T)))
 	r.HandleFunc("/users",
 		basicAuth(hands.Users(DB, T)))
 
