@@ -14,8 +14,11 @@ import (
 type User struct{
 	ID primitive.ObjectID
 	Name string
+	Fullname string
 	Password [32]byte
 	Roles []string
+	Email string
+	QRcode string
 }
 
 type Role struct{
