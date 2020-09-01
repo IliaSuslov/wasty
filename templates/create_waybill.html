@@ -5,8 +5,8 @@
            class="form-control"
            name={{.Name}}
            placeholder={{.Placeholder}}>
-    {{ if ne .Desc ""}}
-      <small id="emailHelp" class="form-text text-muted">{{.Desc}}</small>
+    {{ if eq .Desc ""}}
+      <small class="form-text text-muted">{{.Desc}}</small>
     {{ end }}
   </div>
 {{end}}
@@ -26,7 +26,7 @@
 <body>
 <div class="container-fluid">
     {{ template "navbar.html" .}}
-  <h4>{{.Title}}</h4>
+  <h4>{{ .Title }}</h4>
   {{ template "form_create_waybill" .}}
 </div>
 </body>
