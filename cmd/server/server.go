@@ -58,6 +58,10 @@ func main() {
 		basicAuth(hands.Roles(DB, T)))
 	r.HandleFunc("/users",
 		basicAuth(hands.Users(DB, T)))
+	r.HandleFunc("/create/waybill",
+		basicAuth(hands.CreateWaybillForm(T))).Methods("GET")
+	r.HandleFunc("/create/waybill",
+		basicAuth(hands.CreateWaybill(DB, T))).Methods("POST")
 
 	//r.HandleFunc("/api_v1/users",
 	//	app.CreateTicketHandler(CheckToken, ticket.NewComm(DB), d)).Methods("POST")
