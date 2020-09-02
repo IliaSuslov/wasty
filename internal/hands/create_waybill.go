@@ -24,17 +24,17 @@ func CreateWaybillForm(t *template.Template) func(w http.ResponseWriter, r *http
 		log.Println("CreateWaybillForm")
 		formGroups := []FormGroup{
 			FormGroup{
-				Name:  "Date",
-				Label: "Дата",
-				Type:  "text",
-				Desc:  "дата в формате 2020-09-12",
+				Name:        "Date",
+				Label:       "Дата",
+				Type:        "text",
+				Desc:        "дата в формате 2020-09-12",
 				Placeholder: "2020-09-12",
 			},
 			FormGroup{
-				Name:  "Desc",
-				Label: "Описание",
-				Type:  "text",
-				Desc:  "",
+				Name:        "Desc",
+				Label:       "Описание",
+				Type:        "text",
+				Desc:        "",
 				Placeholder: "дата в формате 2020-09-12",
 			},
 		}
