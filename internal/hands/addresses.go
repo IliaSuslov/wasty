@@ -8,15 +8,26 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 	"net/http"
+	"net/url"
+	"strconv"
 	"strings"
 )
 
-func GetOpts(sort string, limit *int64, skip *int64) (opt *options.FindOptions) {
+func Atoin64(s string) *int64 {
+	i, _ := strconv.Atoi(s)
+	I := int64(i)
+	return &I
+}
+
+func GetOpts(values url.Values) (opt *options.FindOptions) {
+	sort := values.Get("sort")
+	limit := values.Get("limit")
+	skip := values.Get("skip")
+
 	opt = &options.FindOptions{
-		Limit: limit,
-		Skip:  skip,
+		Limit: Atoin64(limit),
+		Skip:  Atoin64(skip),
 	}
 
 	if strings.HasPrefix(sort, "!") {
@@ -25,24 +36,6 @@ func GetOpts(sort string, limit *int64, skip *int64) (opt *options.FindOptions) 
 		opt.Sort = bson.M{sort: 1}
 	}
 	return
-}
-
-func OnError(w http.ResponseWriter, err error) bool {
-	if err == nil {
-		return false
-	}
-	w.WriteHeader(500)
-	err = json.NewEncoder(w).Encode(struct {
-		Success bool
-		Message string
-	}{
-		false,
-		err.Error(),
-	})
-	if err != nil {
-		log.Println(err)
-	}
-	return true
 }
 
 func Addresses(DB *mongo.Database) func(w http.ResponseWriter, r *http.Request) {
@@ -56,27 +49,16 @@ func Addresses(DB *mongo.Database) func(w http.ResponseWriter, r *http.Request) 
 		}
 
 		//query
-		q := &struct {
-			Name  *string
-			Skip  *int64
-			Limit *int64
-		}{}
-		json.NewDecoder(r.Body).Decode(&q)
-		defer r.Body.Close()
-		//name
+		q := r.URL.Query()
 		query := bson.M{}
-		if q.Name != nil {
-			query["name"] = bson.M{"$regex": q.Name}
-		}
+		qregex := AddLowerRegex(query, q)
+		qregex("name")
 
 		c := DB.Collection("addresses")
 		w.Header().Set("ContentType", "application/json")
-		opt := &options.FindOptions{
-			Limit: q.Limit,
-			Skip:  q.Skip,
-		}
+
 		ads := []*model.Address{}
-		cur, err := c.Find(context.Background(), query, opt)
+		cur, err := c.Find(context.Background(), query, GetOpts(q))
 		if OnError(w, err) {
 			return
 		}
