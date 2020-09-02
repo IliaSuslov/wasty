@@ -5,8 +5,8 @@ import (
 )
 
 type Car struct {
-	ID primitive.ObjectID `bson:"_id,omitempty"`
-	Name string
-	Number string
+	ID      primitive.ObjectID `bson:"_id,omitempty"`
+	Name    string
+	Number  string
 	Trailer string
 }

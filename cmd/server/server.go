@@ -39,7 +39,7 @@ func main() {
 	}
 	DB := client.Database(godotenv.GetPanic("DATABASE"))
 	err = model.CreateAdmin(DB)
-	if err!= nil{
+	if err != nil {
 		panic(err)
 	}
 
@@ -53,7 +53,6 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", hands.Home(DB, T)).Methods("GET")
-	r.HandleFunc("/login", hands.Login(DB, T))
 
 	r.HandleFunc("/api/v1/drivers",
 		basicAuth(hands.Drivers(DB))).Methods("GET")
@@ -61,13 +60,8 @@ func main() {
 		basicAuth(hands.Cars(DB))).Methods("GET")
 	r.HandleFunc("/api/v1/addresses",
 		basicAuth(hands.Addresses(DB))).Methods("GET")
-	r.HandleFunc("/api/v1/addresses",
+	r.HandleFunc("/api/v1/waybills",
 		basicAuth(hands.Addresses(DB))).Methods("GET")
-
-
-
-	//r.HandleFunc("/api_v1/users",
-	//	app.CreateTicketHandler(CheckToken, ticket.NewComm(DB), d)).Methods("POST")
 
 	addr := fmt.Sprintf("%s:%d",
 		godotenv.GetPanic("HTTP_HOST"),

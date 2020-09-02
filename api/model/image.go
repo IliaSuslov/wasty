@@ -1,7 +1,7 @@
 package model
 
 type Image struct {
-	Names string
+	Names       string
 	ContentType string
-	Content []byte
+	Content     []byte
 }
