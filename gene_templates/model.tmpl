@@ -1,0 +1,33 @@
+{{- define "model.go" }}{{ $name:=.Name | Title }}
+package {{.Name}}
+
+import (
+  "fmt"
+  "go.mongodb.org/mongo-driver/bson/primitive"
+  "time"
+)
+
+type {{$name}} struct{
+{{- range .Fields}}
+  {{ template "field" .}}
+{{- end}}
+    echo string
+    CreatedOn time.Ticker
+    UpdatedOn time.Ticker
+}
+
+func New()*{{ $name }}{
+  return &{{$name}}{}
+}
+
+{{- range .Fields}}
+func ({{$name}} *{{$name}})Set{{.Name}}({{.Name}} {{.Type}})*{{$name}} {
+    {{$name}}.echo = fmt.Sprintf("set {{.Name}} from %v to %v",  {{$name}}.{{.Name}}, {{.Name}})
+    {{$name}}.{{.Name}}={{.Name}}
+    return {{$name}}
+}
+{{- end}}
+func ({{$name}} *{{$name}})GetEcho()string {
+    return {{$name}}.echo
+}
+{{- end}}

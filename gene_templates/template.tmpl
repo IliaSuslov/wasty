@@ -1,0 +1,42 @@
+{{ define "field" }}  {{.Name}} {{.Type}} {{if not .Annotation}}{{else}}`{{.Annotation}}` {{end}}{{- end}}
+
+{{- define "filter" }}
+		{{$name:=.Name}}
+		{{$name}}:=q.Get("{{.Name}}")
+		if {{$name}}!= ""{
+		{{ if eq .Type "RegExp" }}query[strings.ToLower("{{.Name}}")] = bson.M{"$regex": {{$name}}}{{- end}}
+		}
+{{- end}}
+
+{{define "GetOpts"}}
+func GetOpts(values url.Values) (opt *options.FindOptions) {
+	sort := values.Get("sort")
+	limit := values.Get("limit")
+	skip := values.Get("skip")
+
+	opt = &options.FindOptions{
+		Limit: Atoin64(limit, 100),
+		Skip:  Atoin64(skip, 0),
+	}
+	if sort!= ""{
+		if strings.HasPrefix(sort, "!") {
+			opt.Sort = bson.M{sort[1:]: -1}
+		} else {
+			opt.Sort = bson.M{sort: 1}
+		}
+	}
+	return
+}
+{{end}}
+
+
+{{define "Atoin64"}}
+func Atoin64(s string, def int64) *int64 {
+	if s ==""{
+		return &def
+	}
+	i, _ := strconv.Atoi(s)
+	I := int64(i)
+	return &I
+}
+{{end}}
