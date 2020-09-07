@@ -22,8 +22,8 @@ type Execution struct{
     Trash float32 `bson:"trash"` 
     Images []interface{} `bson:"images"` 
     echo string
-    CreatedOn time.Ticker
-    UpdatedOn time.Ticker
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*Execution{
