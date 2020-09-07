@@ -4,6 +4,7 @@ package driver
 import (
   "fmt"
   "go.mongodb.org/mongo-driver/bson/primitive"
+  "time"
 )
 
 type Driver struct{
@@ -11,7 +12,9 @@ type Driver struct{
     Name string `bson:"name"` 
     Phone string `bson:"phone"` 
     Email string `bson:"email"` 
-  echo string
+    echo string
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*Driver{
