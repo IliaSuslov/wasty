@@ -4,6 +4,7 @@ package car
 import (
   "fmt"
   "go.mongodb.org/mongo-driver/bson/primitive"
+  "time"
 )
 
 type Car struct{
@@ -11,7 +12,9 @@ type Car struct{
     Name string `bson:"name"` 
     Number string `bson:"number"` 
     Trailer string `bson:"trailer"` 
-  echo string
+    echo string
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*Car{
