@@ -33,7 +33,6 @@ func AddInt(query bson.M, q url.Values) func(string) {
 func AddLower(query bson.M, q url.Values) func(string) {
 	return func(name string) {
 		if q.Get(name) != "" {
-			strings.ToLower(name)
 			query[strings.ToLower(name)] = q.Get(name)
 		}
 	}
