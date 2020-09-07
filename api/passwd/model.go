@@ -4,6 +4,7 @@ package passwd
 import (
   "fmt"
   "go.mongodb.org/mongo-driver/bson/primitive"
+  "time"
 )
 
 type Passwd struct{
@@ -12,7 +13,9 @@ type Passwd struct{
     Password [32]byte `bson:"password"` 
     Roles []string `bson:"roles"` 
     Firm interface{} `bson:"firm"` 
-  echo string
+    echo string
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*Passwd{

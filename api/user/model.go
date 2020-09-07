@@ -4,6 +4,7 @@ package user
 import (
   "fmt"
   "go.mongodb.org/mongo-driver/bson/primitive"
+  "time"
 )
 
 type User struct{
@@ -13,7 +14,9 @@ type User struct{
     Firm interface{} `bson:"firm"` 
     Email string `bson:"email"` 
     QRcode string `bson:"qrcode"` 
-  echo string
+    echo string
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*User{
