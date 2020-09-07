@@ -5,19 +5,19 @@ import (
 	"context"
 	"crypto/sha256"
 	"fmt"
-	"github.com/alexsuslov/wasty/api/model"
+	"github.com/alexsuslov/wasty/api/passwd"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func Validator(DB *mongo.Database) GetUser {
-	return func(username string, password string) (User *model.User, err error) {
+	return func(username string, password string) (User *passwd.Passwd, err error) {
 		users := DB.Collection("users")
 		ctx := context.Background()
 		query := bson.M{
 			"name": username,
 		}
-		User = &model.User{}
+		User = &passwd.Passwd{}
 		err = users.FindOne(ctx, query).Decode(User)
 		if err != nil {
 			return nil, err
