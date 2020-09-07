@@ -4,6 +4,7 @@ package page
 import (
   "fmt"
   "go.mongodb.org/mongo-driver/bson/primitive"
+  "time"
 )
 
 type Page struct{
@@ -14,7 +15,9 @@ type Page struct{
     Firm *primitive.ObjectID `bson:"firm"` 
     Read []string `bson:"read"` 
     Write []string `bson:"write"` 
-  echo string
+    echo string
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*Page{
