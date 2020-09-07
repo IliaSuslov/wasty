@@ -1,0 +1,18 @@
+<html>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+  integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+  crossorigin="anonymous"></script>
+<h4>Test Create</h4>
+<form action="/api/v1/cars" method="post">
+  <textarea id="Name"><textarea/>
+  <button id="button" type="button">submit</button>
+</form>
+<script>
+  $(()=>{
+      $(".button").on("click", (e)=>{
+          console.log(e)
+      })
+  })
+</script>
+</html>
