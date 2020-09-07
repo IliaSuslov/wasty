@@ -4,6 +4,7 @@ package waybill
 import (
   "fmt"
   "go.mongodb.org/mongo-driver/bson/primitive"
+  "time"
 )
 
 type Waybill struct{
@@ -16,7 +17,9 @@ type Waybill struct{
     Firm interface{} `bson:"firm"` 
     Jobs []interface{} `bson:"jobs"` 
     Executions []interface{} `bson:"executions"` 
-  echo string
+    echo string
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*Waybill{
