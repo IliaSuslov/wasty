@@ -12,8 +12,8 @@ type {{$name}} struct{
   {{ template "field" .}}
 {{- end}}
     echo string
-    CreatedOn time.Ticker
-    UpdatedOn time.Ticker
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*{{ $name }}{
