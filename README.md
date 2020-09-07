@@ -6,7 +6,13 @@ https://hub.docker.com/_/mongo
 
 ```
 docker run --name mongodb -p 127.0.0.1:27017:27017 -d mongo:bionic
+
+mongo < test_data/mongodb_init.js
+
 ```
+
+
+
 
 ## wasty
 
