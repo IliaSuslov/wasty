@@ -21,8 +21,10 @@ func Route( r *mux.Router, prefix string,
 	list := ListHDL(col, IsAllow, Denied, OnError)
 	item := ItemHDL(col, IsAllow, Denied, None, OnError)
 	update := UpdateHDL(col, IsAllow, Denied, None, OnError)
+	create := CreateHDL(col, IsAllow, Denied, None, OnError)
 
 	r.HandleFunc(prefix+"/:id", basicAuth(item)).Methods("GET")
 	r.HandleFunc(prefix+"/:id", basicAuth(update)).Methods("POST")
 	r.HandleFunc(prefix+"s", basicAuth(list)).Methods("GET")
+	r.HandleFunc(prefix+"s", basicAuth(create)).Methods("POST")
 }

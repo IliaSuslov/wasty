@@ -4,6 +4,7 @@ package firm
 import (
   "fmt"
   "go.mongodb.org/mongo-driver/bson/primitive"
+  "time"
 )
 
 type Firm struct{
@@ -11,7 +12,9 @@ type Firm struct{
     Name string `bson:"name"` 
     Contact string `bson:"contact"` 
     Users []interface{} `bson:"users"` 
-  echo string
+    echo string
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*Firm{

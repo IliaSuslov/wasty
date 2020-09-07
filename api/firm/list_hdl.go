@@ -64,7 +64,10 @@ func ListHDL(Col *mongo.Collection,
 		query[strings.ToLower("Name")] = bson.M{"$regex": Name}
 		}
     
-
+		count, err := Col.CountDocuments(context.Background(), query)
+		if OnError(w, err) {
+			return
+		}
 		cur, err := Col.Find(context.Background(), query, GetOpts(q))
 		if OnError(w, err) {
 			return
@@ -79,7 +82,7 @@ func ListHDL(Col *mongo.Collection,
 			}
 			vals = append(vals, val)
 		}
-		json.NewEncoder(w).Encode(vals)
+		err = json.NewEncoder(w).Encode(struct{Count int64; Items []*Firm}{count, vals})
 		if OnError(w, err) {
 			return
 		}
