@@ -16,8 +16,8 @@ type Image struct{
     ContentType string `bson:"content_type"` 
     Content []byte `bson:"content"` 
     echo string
-    CreatedOn time.Ticker
-    UpdatedOn time.Ticker
+    CreatedOn time.Time
+    UpdatedOn time.Time
 }
 
 func New()*Image{
