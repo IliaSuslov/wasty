@@ -18,3 +18,4 @@ go.sum
 .login
 .idea
 config
+bin

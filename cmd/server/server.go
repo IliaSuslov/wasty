@@ -4,8 +4,14 @@ import (
 	"context"
 	"fmt"
 	"github.com/alexsuslov/godotenv"
-
-	"github.com/alexsuslov/wasty/api/model"
+	"github.com/alexsuslov/wasty/api/address"
+	"github.com/alexsuslov/wasty/api/car"
+	"github.com/alexsuslov/wasty/api/driver"
+	"github.com/alexsuslov/wasty/api/firm"
+	"github.com/alexsuslov/wasty/api/page"
+	"github.com/alexsuslov/wasty/api/passwd"
+	"github.com/alexsuslov/wasty/api/user"
+	"github.com/alexsuslov/wasty/api/waybill"
 	"github.com/alexsuslov/wasty/internal/auth"
 	"github.com/alexsuslov/wasty/internal/hands"
 	"github.com/gorilla/mux"
@@ -38,10 +44,7 @@ func main() {
 		panic(err)
 	}
 	DB := client.Database(godotenv.GetPanic("DATABASE"))
-	err = model.CreateAdmin(DB)
-	if err != nil {
-		panic(err)
-	}
+	passwd.CreateAdmin(DB)
 
 	//templates
 	T, err := Load("templates", ".html")
@@ -53,15 +56,21 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", hands.Home(DB, T)).Methods("GET")
+	IsAllow := func(User interface{})bool{
+		return true
+	}
 
-	r.HandleFunc("/api/v1/drivers",
-		basicAuth(hands.Drivers(DB))).Methods("GET")
-	r.HandleFunc("/api/v1/cars",
-		basicAuth(hands.Cars(DB))).Methods("GET")
-	r.HandleFunc("/api/v1/addresses",
-		basicAuth(hands.Addresses(DB))).Methods("GET")
-	r.HandleFunc("/api/v1/waybills",
-		basicAuth(hands.Addresses(DB))).Methods("GET")
+	//drivers
+	driver.Route(r, "/api/v1/driver", DB, basicAuth, IsAllow, hands.Denied, hands.None, hands.OnError)
+	address.Route(r, "/api/v1/addr", DB, basicAuth, IsAllow, hands.Denied, hands.None, hands.OnError)
+	car.Route(r, "/api/v1/car", DB, basicAuth, IsAllow, hands.Denied, hands.None, hands.OnError)
+	firm.Route(r, "/api/v1/firm", DB, basicAuth, IsAllow, hands.Denied, hands.None, hands.OnError)
+	user.Route(r, "/api/v1/user", DB, basicAuth, IsAllow, hands.Denied, hands.None, hands.OnError)
+	waybill.Route(r, "/api/v1/waybill", DB, basicAuth, IsAllow, hands.Denied, hands.None, hands.OnError)
+	page.Route(r, "/api/v1/page", DB, basicAuth, IsAllow, hands.Denied, hands.None, hands.OnError)
+
+	view := page.PageHDL(DB.Collection("pages"), hands.Denied, hands.None, hands.OnError)
+	r.HandleFunc("/api/v1/view/{name}", basicAuth(view)).Methods("GET")
 
 	addr := fmt.Sprintf("%s:%d",
 		godotenv.GetPanic("HTTP_HOST"),
@@ -87,7 +96,7 @@ func Load(path string, ext string) (t *template.Template, err error) {
 	if err != nil {
 		return
 	}
-	filesPath := []string{}
+	var filesPath []string
 	for _, fileInfo := range filesInfo {
 		if !fileInfo.IsDir() {
 			Ext := filepath.Ext(fileInfo.Name())
